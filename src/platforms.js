@@ -1,9 +1,17 @@
 // Platform registry — imported by background.js (ES module context only)
 
 export const PLATFORMS = {
+  mock: {
+    name: 'Mock (localhost)',
+    domains: ['localhost'],
+    tier: 'free',
+    knownHeartbeatPaths: ['/api/session/ping'],
+    modalSelectors: ['#timeout-warning'],
+    dismissSelectors: ['#continueSession'],
+  },
   westlaw: {
     name: 'Westlaw',
-    domains: ['westlaw.com', 'lawschool.westlaw.com'],
+    domains: ['westlaw.com', 'westlaw.co.uk', 'lawschool.westlaw.com'],
     tier: 'free',
     knownHeartbeatPaths: ['/app/heartbeat', '/cobalt/api/session', '/api/session/ping'],
     modalSelectors: [

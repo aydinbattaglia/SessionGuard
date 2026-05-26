@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Westlaw — Mock Research Session</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f5f5f5; }
+
+    .topbar {
+      background: #c8102e; color: #fff;
+      padding: 12px 24px;
+      display: flex; align-items: center; gap: 16px;
+    }
+    .topbar-logo { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
+    .topbar-sub  { font-size: 13px; opacity: 0.8; }
+    .topbar-badge {
+      margin-left: auto; font-size: 11px;
+      background: rgba(255,255,255,0.2);
+      padding: 3px 8px; border-radius: 4px;
+    }
+
+    .content { max-width: 820px; margin: 32px auto; padding: 0 16px; }
+
+    .card {
+      background: #fff; border-radius: 6px;
+      border: 1px solid #ddd; padding: 24px;
+      margin-bottom: 20px;
+    }
+    .card h2 { font-size: 15px; color: #333; margin-bottom: 12px; }
+
+    /* Session status bar */
+    .status-bar {
+      display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+    }
+    .status-dot {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: #22c55e; flex-shrink: 0;
+    }
+    .status-dot.expired { background: #ef4444; }
+    .timer { font-size: 13px; color: #555; }
+    .timer strong { color: #111; font-variant-numeric: tabular-nums; }
+
+    .progress-track {
+      flex: 1; min-width: 160px; height: 6px;
+      background: #e5e7eb; border-radius: 3px; overflow: hidden;
+    }
+    .progress-bar {
+      height: 100%; background: #22c55e;
+      transition: width 1s linear, background 0.3s;
+      border-radius: 3px;
+    }
+    .progress-bar.warning { background: #f59e0b; }
+    .progress-bar.danger  { background: #ef4444; }
+
+    /* Test controls */
+    .controls { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 4px; }
+    button {
+      padding: 7px 14px; border: 1px solid #d1d5db;
+      border-radius: 5px; font-size: 12px; cursor: pointer;
+      background: #fff; color: #374151;
+    }
+    button:hover { background: #f9fafb; }
+    button.danger { border-color: #fca5a5; color: #b91c1c; }
+    button.danger:hover { background: #fef2f2; }
+    button.active { background: #fef9c3; border-color: #fde047; color: #713f12; }
+
+    .log {
+      font-family: "SF Mono", "Fira Code", monospace;
+      font-size: 11px; line-height: 1.6;
+      max-height: 160px; overflow-y: auto;
+      color: #374151;
+    }
+    .log .ts { color: #9ca3af; }
+    .log .ok  { color: #16a34a; }
+    .log .err { color: #dc2626; }
+    .log .ext { color: #2563eb; }
+
+    /* Timeout modal — uses the same selector SessionGuard watches */
+    #timeout-warning {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.55);
+      z-index: 9999;
+      align-items: center; justify-content: center;
+    }
+    #timeout-warning.visible { display: flex; }
+    .modal-box {
+      background: #fff; border-radius: 8px;
+      padding: 28px 32px; max-width: 380px; width: 90%;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      text-align: center;
+    }
+    .modal-box h3 { font-size: 16px; margin-bottom: 10px; color: #111; }
+    .modal-box p  { font-size: 13px; color: #555; margin-bottom: 20px; }
+    #continueSession {
+      padding: 10px 24px;
+      background: #c8102e; color: #fff;
+      border: none; border-radius: 5px;
+      font-size: 14px; font-weight: 600; cursor: pointer;
+    }
+    #continueSession:hover { background: #a50d26; }
+
+    .expired-notice {
+      display: none; padding: 16px; background: #fef2f2;
+      border: 1px solid #fecaca; border-radius: 6px;
+      color: #991b1b; font-size: 13px; margin-top: 12px;
+    }
+    .expired-notice.visible { display: block; }
+  </style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="topbar-logo">Westlaw</span>
+  <span class="topbar-sub">Mock Research Session</span>
+  <span class="topbar-badge" id="extStatus">SessionGuard: checking...</span>
+</div>
+
+<div class="content">
+
+  <div class="card">
+    <h2>Session Status</h2>
+    <div class="status-bar">
+      <span class="status-dot" id="statusDot"></span>
+      <span class="timer" id="timerLabel">Loading...</span>
+      <div class="progress-track">
+        <div class="progress-bar" id="progressBar"></div>
+      </div>
+    </div>
+    <div class="expired-notice" id="expiredNotice">
+      Your session has expired. In a real platform you would be redirected to the login page.
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Test Controls</h2>
+    <div class="controls">
+      <button id="btnPause">Pause platform heartbeat</button>
+      <button id="btnExpire" class="danger">Force session expire</button>
+      <button id="btnReset">Reset session</button>
+    </div>
+    <p style="margin-top:10px;font-size:11px;color:#6b7280;">
+      Pause the heartbeat, then wait — SessionGuard's alarm should fire before the session expires.
+    </p>
+  </div>
+
+  <div class="card">
+    <h2>Request Log</h2>
+    <div class="log" id="log"></div>
+  </div>
+
+</div>
+
+<!-- Timeout modal — SessionGuard watches #timeout-warning and clicks #continueSession -->
+<div id="timeout-warning">
+  <div class="modal-box">
+    <h3>Your session is about to expire</h3>
+    <p>You will be logged out due to inactivity. Click below to continue your session.</p>
+    <button id="continueSession">Continue Session</button>
+  </div>
+</div>
+
+<script>
+  const TTL = {{TTL}}; // injected by server
+  const HEARTBEAT_INTERVAL_MS = 30_000;
+  const MODAL_WARN_SECS = 20;
+
+  let platformHeartbeatPaused = false;
+  let heartbeatTimer = null;
+  let pollTimer = null;
+
+  const log = document.getElementById('log');
+  const progressBar = document.getElementById('progressBar');
+  const timerLabel = document.getElementById('timerLabel');
+  const statusDot = document.getElementById('statusDot');
+  const modal = document.getElementById('timeout-warning');
+  const expiredNotice = document.getElementById('expiredNotice');
+
+  function addLog(msg, cls = '') {
+    const ts = new Date().toTimeString().slice(0, 8);
+    const line = document.createElement('div');
+    line.innerHTML = `<span class="ts">${ts}</span> <span class="${cls}">${msg}</span>`;
+    log.prepend(line);
+    if (log.children.length > 40) log.lastChild.remove();
+  }
+
+  async function pingHeartbeat(source = 'platform') {
+    try {
+      const res = await fetch('/api/session/ping');
+      if (res.ok) {
+        addLog(`[${source}] /api/session/ping → 200 OK`, source === 'platform' ? 'ok' : 'ext');
+      } else {
+        addLog(`[${source}] /api/session/ping → ${res.status}`, 'err');
+      }
+    } catch (e) {
+      addLog(`[${source}] heartbeat failed: ${e.message}`, 'err');
+    }
+  }
+
+  async function pollStatus() {
+    const res = await fetch('/ui/timer');
+    const data = await res.json();
+
+    if (!data.active) {
+      timerLabel.innerHTML = '<strong>Session expired</strong>';
+      statusDot.className = 'status-dot expired';
+      progressBar.style.width = '0%';
+      progressBar.className = 'progress-bar danger';
+      modal.classList.remove('visible');
+      expiredNotice.classList.add('visible');
+      return;
+    }
+
+    expiredNotice.classList.remove('visible');
+    statusDot.className = 'status-dot';
+    const pct = Math.round((data.expiresIn / TTL) * 100);
+    progressBar.style.width = pct + '%';
+    progressBar.className = 'progress-bar' +
+      (pct < 15 ? ' danger' : pct < 35 ? ' warning' : '');
+    timerLabel.innerHTML = `Active &mdash; expires in <strong>${data.expiresIn}s</strong>`;
+
+    // Show modal when close to expiry
+    if (data.expiresIn <= MODAL_WARN_SECS && data.expiresIn > 0) {
+      modal.classList.add('visible');
+    } else {
+      modal.classList.remove('visible');
+    }
+  }
+
+  function scheduleHeartbeat() {
+    clearTimeout(heartbeatTimer);
+    if (platformHeartbeatPaused) return;
+    heartbeatTimer = setTimeout(async () => {
+      await pingHeartbeat('platform');
+      scheduleHeartbeat();
+    }, HEARTBEAT_INTERVAL_MS);
+  }
+
+  // Manual continue button (also what SessionGuard auto-clicks)
+  document.getElementById('continueSession').addEventListener('click', async () => {
+    modal.classList.remove('visible');
+    await pingHeartbeat('manual');
+  });
+
+  document.getElementById('btnPause').addEventListener('click', function () {
+    platformHeartbeatPaused = !platformHeartbeatPaused;
+    this.textContent = platformHeartbeatPaused ? 'Resume platform heartbeat' : 'Pause platform heartbeat';
+    this.classList.toggle('active', platformHeartbeatPaused);
+    if (!platformHeartbeatPaused) scheduleHeartbeat();
+    addLog(`Platform heartbeat ${platformHeartbeatPaused ? 'PAUSED' : 'resumed'}`, platformHeartbeatPaused ? 'err' : 'ok');
+  });
+
+  document.getElementById('btnExpire').addEventListener('click', async () => {
+    await fetch('/api/session/expire', { method: 'POST' });
+    addLog('Session force-expired', 'err');
+    pollStatus();
+  });
+
+  document.getElementById('btnReset').addEventListener('click', async () => {
+    platformHeartbeatPaused = false;
+    document.getElementById('btnPause').textContent = 'Pause platform heartbeat';
+    document.getElementById('btnPause').classList.remove('active');
+    expiredNotice.classList.remove('visible');
+    modal.classList.remove('visible');
+    await pingHeartbeat('manual');
+    scheduleHeartbeat();
+    addLog('Session reset', 'ok');
+  });
+
+  // Initial heartbeat and poll loop
+  pingHeartbeat('platform');
+  scheduleHeartbeat();
+  pollStatus();
+  pollTimer = setInterval(pollStatus, 1000);
+
+  addLog(`Mock session started. TTL: ${TTL}s, platform heartbeat: every ${HEARTBEAT_INTERVAL_MS/1000}s`);
+</script>
+</body>
+</html>

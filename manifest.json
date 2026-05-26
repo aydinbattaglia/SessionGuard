@@ -5,7 +5,9 @@
   "description": "Keeps legal research platform sessions alive in the background.",
   "permissions": ["webRequest", "storage", "alarms", "tabs"],
   "host_permissions": [
+    "http://localhost:3131/*",
     "https://*.westlaw.com/*",
+    "https://*.westlaw.co.uk/*",
     "https://*.lexisnexis.com/*",
     "https://advance.lexis.com/*",
     "https://*.bloomberglaw.com/*",
@@ -20,7 +22,9 @@
   "content_scripts": [
     {
       "matches": [
+        "http://localhost:3131/*",
         "https://*.westlaw.com/*",
+        "https://*.westlaw.co.uk/*",
         "https://*.lexisnexis.com/*",
         "https://advance.lexis.com/*",
         "https://*.bloomberglaw.com/*",

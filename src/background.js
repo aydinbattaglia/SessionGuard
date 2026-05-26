@@ -12,19 +12,25 @@ const requestLog = new Map();      // platformKey -> [{ url, method, headers, ti
 
 // === Lifecycle ===
 
-chrome.runtime.onInstalled.addListener(async () => {
-  const existing = await chrome.storage.local.get(null);
-  const defaults = {
-    endpoints: {},
-    prefs: { enabled: true, intervalMinutes: DEFAULT_INTERVAL },
-    license: { tier: 'free', key: null },
-    stats: {},
-  };
-  await chrome.storage.local.set({ ...defaults, ...existing });
-  await scheduleAlarmsFromStorage();
-});
+const DEFAULTS = {
+  endpoints: {},
+  prefs: { enabled: true, intervalMinutes: DEFAULT_INTERVAL },
+  license: { tier: 'free', key: null },
+  stats: {},
+};
 
-chrome.runtime.onStartup.addListener(scheduleAlarmsFromStorage);
+async function initStorage() {
+  const existing = await chrome.storage.local.get(null);
+  // Only write keys that are missing — never overwrite user data
+  const missing = Object.fromEntries(
+    Object.entries(DEFAULTS).filter(([k]) => !(k in existing))
+  );
+  if (Object.keys(missing).length > 0) await chrome.storage.local.set(missing);
+  await scheduleAlarmsFromStorage();
+}
+
+chrome.runtime.onInstalled.addListener(initStorage);
+chrome.runtime.onStartup.addListener(initStorage);
 
 async function scheduleAlarmsFromStorage() {
   const { endpoints, prefs } = await chrome.storage.local.get(['endpoints', 'prefs']);
@@ -46,7 +52,9 @@ async function ensureAlarm(platformKey, intervalMinutes) {
 // === Network Observation (top-level — survives service worker suspension) ===
 
 const PLATFORM_URL_PATTERNS = [
+  'http://localhost:3131/*',
   'https://*.westlaw.com/*',
+  'https://*.westlaw.co.uk/*',
   'https://*.lexisnexis.com/*',
   'https://advance.lexis.com/*',
   'https://*.bloomberglaw.com/*',
@@ -64,7 +72,7 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
     });
     pendingRequests.set(requestId, { url, method, headers: relevant, timestamp: Date.now() });
   },
-  { urls: PLATFORM_URL_PATTERNS, types: ['xmlhttprequest', 'fetch'] },
+  { urls: PLATFORM_URL_PATTERNS, types: ['xmlhttprequest'] },
   ['requestHeaders', 'extraHeaders']
 );
 
@@ -89,15 +97,16 @@ chrome.webRequest.onCompleted.addListener(
 
     analyzeForHeartbeat(platform.key, pruned);
   },
-  { urls: PLATFORM_URL_PATTERNS, types: ['xmlhttprequest', 'fetch'] },
+  { urls: PLATFORM_URL_PATTERNS, types: ['xmlhttprequest'] },
   ['responseHeaders']
 );
 
-function isHeartbeatCandidate(url) {
+export function isHeartbeatCandidate(url) {
   try {
     const { pathname } = new URL(url);
     if (/\.(js|css|png|jpg|gif|ico|woff2?|ttf|svg)(\?|$)/i.test(pathname)) return false;
-    if (/^\/(search|document|content|static|assets)/i.test(pathname)) return false;
+    if (/^\/(search|document|content|static|assets)(\/|$|\?)/i.test(pathname)) return false;
+    if (pathname.startsWith('/ui/')) return false;
     return true;
   } catch {
     return false;
@@ -105,21 +114,10 @@ function isHeartbeatCandidate(url) {
 }
 
 async function analyzeForHeartbeat(platformKey, log) {
-  // Group by normalized URL, find any URL that repeats >= MIN_REPEATS times
-  const counts = new Map();
-  for (const entry of log) {
-    const key = normalizeUrl(entry.url);
-    const existing = counts.get(key);
-    if (!existing) { counts.set(key, entry); continue; }
-    if (log.filter(e => normalizeUrl(e.url) === key).length >= MIN_REPEATS) {
-      await persistEndpoint(platformKey, entry);
-      return;
-    }
-  }
-
-  // Also check against known heartbeat paths for this platform
   const platform = PLATFORMS[platformKey];
   if (!platform) return;
+
+  // Known paths take priority — check before generic repeat detection
   for (const entry of log) {
     const { pathname } = new URL(entry.url);
     if (platform.knownHeartbeatPaths.some(p => pathname.startsWith(p))) {
@@ -127,9 +125,20 @@ async function analyzeForHeartbeat(platformKey, log) {
       return;
     }
   }
+
+  // Fallback: find the first URL that repeats >= MIN_REPEATS times
+  const counts = new Map();
+  for (const entry of log) {
+    const key = normalizeUrl(entry.url);
+    if (!counts.has(key)) { counts.set(key, entry); continue; }
+    if (log.filter(e => normalizeUrl(e.url) === key).length >= MIN_REPEATS) {
+      await persistEndpoint(platformKey, entry);
+      return;
+    }
+  }
 }
 
-function normalizeUrl(url) {
+export function normalizeUrl(url) {
   try {
     const u = new URL(url);
     for (const p of ['t', 'ts', 'timestamp', 'nonce', '_', 'rand', 'cb']) {
@@ -168,20 +177,25 @@ chrome.alarms.onAlarm.addListener(async ({ name }) => {
   await fireKeepalive(platformKey);
 });
 
-async function fireKeepalive(platformKey) {
+export async function fireKeepalive(platformKey) {
   const { endpoints, prefs, license, stats } = await chrome.storage.local.get([
     'endpoints', 'prefs', 'license', 'stats',
   ]);
 
-  if (!prefs?.enabled) return;
+  if (prefs?.enabled === false) { console.debug('[SG] keepalive skipped — disabled'); return; }
 
   const platform = PLATFORMS[platformKey];
-  if (!platform) return;
+  if (!platform) { console.debug('[SG] keepalive skipped — unknown platform:', platformKey); return; }
 
-  if (platform.tier === 'paid' && license?.tier !== 'pro') return;
+  if (platform.tier === 'paid' && license?.tier !== 'pro') {
+    console.debug('[SG] keepalive skipped — paid platform on free tier:', platformKey);
+    return;
+  }
 
   const endpoint = endpoints?.[platformKey];
-  if (!endpoint) return;
+  if (!endpoint) { console.debug('[SG] keepalive skipped — no endpoint stored for:', platformKey); return; }
+
+  console.debug('[SG] firing keepalive →', endpoint.url);
 
   let ok = false;
   try {
@@ -191,15 +205,15 @@ async function fireKeepalive(platformKey) {
       headers: Object.fromEntries((endpoint.headers ?? []).map(h => [h.name, h.value])),
     });
     ok = res.ok;
+    console.debug('[SG] keepalive response:', res.status, ok ? 'OK' : 'FAILED');
 
     if (res.status === 401) {
-      // Session has actually expired — clear stored endpoint so re-detection fires next visit
       delete endpoints[platformKey];
       await chrome.storage.local.set({ endpoints });
       chrome.alarms.clear(ALARM_PREFIX + platformKey);
     }
-  } catch {
-    // Network error or CORS — not actionable here
+  } catch (err) {
+    console.warn('[SG] keepalive fetch error:', err.message);
   }
 
   const now = Date.now();
@@ -254,7 +268,7 @@ chrome.tabs.onUpdated.addListener(async (tabId, { status }, tab) => {
 
 chrome.runtime.onMessage.addListener((msg, sender, reply) => {
   if (msg.type === 'GET_STATUS') {
-    buildStatus(sender.tab?.id).then(reply);
+    buildStatus(msg.tabId ?? sender.tab?.id).then(reply);
     return true;
   }
   if (msg.type === 'SET_PREF') {
@@ -263,7 +277,7 @@ chrome.runtime.onMessage.addListener((msg, sender, reply) => {
   }
 });
 
-async function buildStatus(tabId) {
+export async function buildStatus(tabId) {
   const { endpoints, prefs, license, stats } = await chrome.storage.local.get([
     'endpoints', 'prefs', 'license', 'stats',
   ]);
@@ -300,9 +314,26 @@ async function applyPref(key, value) {
   const updated = { ...(prefs ?? {}), [key]: value };
   await chrome.storage.local.set({ prefs: updated });
 
+  const { endpoints } = await chrome.storage.local.get('endpoints');
+  const platformKeys = Object.keys(endpoints ?? {});
+
+  if (key === 'enabled') {
+    for (const platformKey of platformKeys) {
+      await chrome.alarms.clear(ALARM_PREFIX + platformKey);
+    }
+    if (value) {
+      const interval = updated.intervalMinutes ?? DEFAULT_INTERVAL;
+      for (const platformKey of platformKeys) {
+        chrome.alarms.create(ALARM_PREFIX + platformKey, {
+          delayInMinutes: interval,
+          periodInMinutes: interval,
+        });
+      }
+    }
+  }
+
   if (key === 'intervalMinutes') {
-    const { endpoints } = await chrome.storage.local.get('endpoints');
-    for (const platformKey of Object.keys(endpoints ?? {})) {
+    for (const platformKey of platformKeys) {
       const name = ALARM_PREFIX + platformKey;
       await chrome.alarms.clear(name);
       chrome.alarms.create(name, { delayInMinutes: value, periodInMinutes: value });

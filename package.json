@@ -1,0 +1,30 @@
+{
+  "name": "sessionguard",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "mock": "node tests/mock-server/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aydinbattaglia/SessionGuard.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/aydinbattaglia/SessionGuard/issues"
+  },
+  "homepage": "https://github.com/aydinbattaglia/SessionGuard#readme",
+  "devDependencies": {
+    "jsdom": "^29.1.1",
+    "vitest": "^4.1.7"
+  }
+}

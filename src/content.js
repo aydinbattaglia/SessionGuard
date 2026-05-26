@@ -3,6 +3,10 @@
 
   // Modal selectors per platform domain suffix
   const CONFIGS = {
+    'localhost': {
+      modal: ['#timeout-warning'],
+      dismiss: ['#continueSession'],
+    },
     'westlaw.com': {
       modal: ['#timeout-warning', '.session-timeout-modal', '.cobalt-session-timeout', '[data-testid="timeout-modal"]'],
       dismiss: ['#continueSession', '.continue-session-btn', '[data-testid="continue-session"]', 'button[data-id="continueSession"]'],
