@@ -52,7 +52,6 @@ async function ensureAlarm(platformKey, intervalMinutes) {
 // === Network Observation (top-level — survives service worker suspension) ===
 
 const PLATFORM_URL_PATTERNS = [
-  'http://localhost:3131/*',
   'https://*.westlaw.com/*',
   'https://*.westlaw.co.uk/*',
   'https://*.lexisnexis.com/*',
