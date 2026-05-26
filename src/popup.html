@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SessionGuard</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+
+    <header>
+      <div class="logo">
+        <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+        <span>SessionGuard</span>
+      </div>
+      <label class="toggle" title="Enable / disable">
+        <input type="checkbox" id="enableToggle">
+        <span class="slider"></span>
+      </label>
+    </header>
+
+    <div id="platformSection" class="platform-section hidden">
+      <div class="status-row">
+        <span id="statusDot" class="dot"></span>
+        <span id="platformName" class="platform-name"></span>
+        <span id="lastKeepalive" class="muted"></span>
+      </div>
+      <div id="sessionsKept" class="sessions-kept"></div>
+    </div>
+
+    <div id="idleSection" class="idle-section">
+      Open Westlaw, LexisNexis, Bloomberg Law, or PACER to activate SessionGuard.
+    </div>
+
+    <div class="interval-row">
+      <label for="intervalSlider">
+        Interval: <strong id="intervalVal">8</strong>&thinsp;min
+      </label>
+      <input type="range" id="intervalSlider" min="3" max="15" step="1" value="8">
+    </div>
+
+    <div id="upgradeNotice" class="upgrade-notice hidden">
+      <strong>Pro</strong> unlocks LexisNexis, Bloomberg Law &amp; PACER.
+      <a id="upgradeLink" href="#" class="upgrade-link">Upgrade &rarr;</a>
+    </div>
+
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>

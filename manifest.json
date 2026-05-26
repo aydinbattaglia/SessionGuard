@@ -1,0 +1,49 @@
+{
+  "manifest_version": 3,
+  "name": "SessionGuard",
+  "version": "1.0.0",
+  "description": "Keeps legal research platform sessions alive in the background.",
+  "permissions": ["webRequest", "storage", "alarms", "tabs"],
+  "host_permissions": [
+    "https://*.westlaw.com/*",
+    "https://*.lexisnexis.com/*",
+    "https://advance.lexis.com/*",
+    "https://*.bloomberglaw.com/*",
+    "https://pacer.gov/*",
+    "https://*.pacer.gov/*",
+    "https://*.uscourts.gov/*"
+  ],
+  "background": {
+    "service_worker": "src/background.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://*.westlaw.com/*",
+        "https://*.lexisnexis.com/*",
+        "https://advance.lexis.com/*",
+        "https://*.bloomberglaw.com/*",
+        "https://pacer.gov/*",
+        "https://*.pacer.gov/*",
+        "https://*.uscourts.gov/*"
+      ],
+      "js": ["src/content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_popup": "src/popup.html",
+    "default_title": "SessionGuard",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}
