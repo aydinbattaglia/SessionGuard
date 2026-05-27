@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: sessionguard-api
+    runtime: node
+    rootDir: server
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: STRIPE_SECRET_KEY
+        sync: false
+      - key: STRIPE_WEBHOOK_SECRET
+        sync: false
+      - key: STRIPE_MONTHLY_PRICE_ID
+        sync: false
+      - key: STRIPE_ANNUAL_PRICE_ID
+        sync: false
+      - key: SUCCESS_URL
+        value: https://sessionguard.io/success
+      - key: CANCEL_URL
+        value: https://sessionguard.io/pricing

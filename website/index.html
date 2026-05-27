@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SessionGuard — Never Get Logged Out of Legal Research Platforms</title>
+  <meta name="description" content="SessionGuard is a Chrome extension that keeps your Westlaw, LexisNexis, Bloomberg Law, and PACER sessions alive automatically.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+    </svg>
+    SessionGuard
+  </a>
+  <div class="nav-links">
+    <a href="#features">Features</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="mailto:support@sessionguard.io">Support</a>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-badge">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+    </svg>
+    Chrome Extension
+  </div>
+  <h1>Never Get Logged Out of Legal Research Platforms Again</h1>
+  <p>SessionGuard keeps your Westlaw, LexisNexis, Bloomberg Law, and PACER sessions alive automatically — so you can focus on research, not re-logging in.</p>
+  <div class="hero-cta">
+    <a href="https://chromewebstore.google.com/detail/sessionguard" class="btn btn-primary btn-lg">Add to Chrome — Free</a>
+    <a href="pricing.html" class="btn btn-outline btn-lg">See Pro Plans</a>
+  </div>
+  <span class="hero-note">No account required &middot; Works automatically &middot; Cancel anytime</span>
+</section>
+
+<!-- Platforms -->
+<section class="platforms">
+  <p>Works with</p>
+  <div class="platform-chips">
+    <span class="chip">Westlaw</span>
+    <span class="chip">LexisNexis</span>
+    <span class="chip">Bloomberg Law</span>
+    <span class="chip">PACER</span>
+    <span class="chip">PACER / USCOURTS</span>
+  </div>
+</section>
+
+<!-- Features -->
+<section class="features" id="features">
+  <div class="section-label">How it works</div>
+  <div class="section-title">Set it once. Forget session timeouts forever.</div>
+  <div class="feature-grid">
+
+    <div class="feature-card">
+      <div class="feature-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+        </svg>
+      </div>
+      <h3>Automatic keepalives</h3>
+      <p>SessionGuard silently pings your session endpoint every few minutes, resetting the inactivity timer without touching your workflow.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+        </svg>
+      </div>
+      <h3>Smart endpoint detection</h3>
+      <p>No configuration needed. SessionGuard watches your network traffic to discover the right heartbeat endpoint for each platform automatically.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+      </div>
+      <h3>Secure by design</h3>
+      <p>Your credentials never leave your browser. SessionGuard replays existing requests — it never stores passwords or login data of any kind.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+        </svg>
+      </div>
+      <h3>Session stats</h3>
+      <p>See how many session timeouts were prevented and when the last keepalive fired — right in the extension popup.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
+        </svg>
+      </div>
+      <h3>Adjustable interval</h3>
+      <p>Control how often keepalives fire — anywhere from 3 to 15 minutes — to match your platform's timeout window.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/>
+        </svg>
+      </div>
+      <h3>Lightweight</h3>
+      <p>Runs as a background service worker with no visible UI impact. Zero effect on page load or browser performance.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- Pricing preview -->
+<section class="pricing" id="pricing">
+  <div class="pricing-header">
+    <div class="section-label">Pricing</div>
+    <div class="section-title">Simple, transparent plans</div>
+  </div>
+  <div class="pricing-cards">
+
+    <div class="plan-card">
+      <div class="plan-name">Free</div>
+      <div class="plan-price">$0</div>
+      <div class="plan-period">Forever free</div>
+      <ul class="plan-features">
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          Westlaw keepalive
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          Smart endpoint detection
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          Session stats
+        </li>
+        <li class="muted">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          LexisNexis — Pro only
+        </li>
+        <li class="muted">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          Bloomberg Law — Pro only
+        </li>
+        <li class="muted">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          PACER — Pro only
+        </li>
+      </ul>
+      <a href="https://chromewebstore.google.com/detail/sessionguard" class="btn btn-outline btn-full">Add to Chrome</a>
+    </div>
+
+    <div class="plan-card featured">
+      <div class="plan-badge">MOST POPULAR</div>
+      <div class="plan-name">Pro</div>
+      <div class="plan-price" id="heroPrice">$5<span>/mo</span></div>
+      <div class="plan-period" id="heroPeriod">Billed monthly</div>
+      <ul class="plan-features">
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          Everything in Free
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          LexisNexis keepalive
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          Bloomberg Law keepalive
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          PACER keepalive
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          Priority support
+        </li>
+      </ul>
+      <a href="pricing.html" class="btn btn-primary btn-full">Get Pro</a>
+    </div>
+
+  </div>
+  <p style="text-align:center; margin-top:20px; font-size:13px; color:var(--muted);">
+    <a href="pricing.html">See annual pricing and full comparison &rarr;</a>
+  </p>
+</section>
+
+<!-- FAQ -->
+<section class="faq">
+  <div class="section-label" style="text-align:center">FAQ</div>
+  <div class="section-title" style="text-align:center">Common questions</div>
+
+  <details>
+    <summary>Does SessionGuard store my passwords or credentials?</summary>
+    <p>No. SessionGuard never stores passwords or login credentials of any kind. It replays small, already-authenticated network requests that your browser has already made, using cookies and tokens that are already present in your browser's session.</p>
+  </details>
+
+  <details>
+    <summary>Will my institution know I'm using SessionGuard?</summary>
+    <p>SessionGuard sends the same keepalive requests your browser would send during normal activity. From the platform's perspective, it looks like you are simply staying active. It does not circumvent authentication or access controls.</p>
+  </details>
+
+  <details>
+    <summary>Which platforms are supported?</summary>
+    <p>Free plan: Westlaw. Pro plan: Westlaw, LexisNexis, Bloomberg Law, and PACER (pacer.gov and all uscourts.gov sub-domains).</p>
+  </details>
+
+  <details>
+    <summary>How do I activate Pro after subscribing?</summary>
+    <p>After subscribing, open the SessionGuard extension popup, click "Already subscribed? Activate →", enter the email address you used at checkout, and click Activate. Your Pro tier unlocks immediately.</p>
+  </details>
+
+  <details>
+    <summary>Can I cancel anytime?</summary>
+    <p>Yes. Cancel from your <a href="https://billing.stripe.com/p/login/sessionguard">billing portal</a> at any time. Your Pro access remains active until the end of the current billing period.</p>
+  </details>
+</section>
+
+<footer>
+  <span>&copy; 2025 SessionGuard</span>
+  <div class="footer-links">
+    <a href="pricing.html">Pricing</a>
+    <a href="privacy.html">Privacy</a>
+    <a href="terms.html">Terms</a>
+    <a href="mailto:support@sessionguard.io">Support</a>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,4 +1,5 @@
-const PRICING_URL = 'https://sessionguard.io/pricing';
+const API_URL = 'https://api.sessionguard.io';
+const MANAGE_URL = 'https://billing.stripe.com/p/login/sessionguard';
 
 document.addEventListener('DOMContentLoaded', async () => {
   const enableToggle   = document.getElementById('enableToggle');
@@ -11,6 +12,12 @@ document.addEventListener('DOMContentLoaded', async () => {
   const lastKeepalive  = document.getElementById('lastKeepalive');
   const sessionsKept   = document.getElementById('sessionsKept');
   const upgradeNotice  = document.getElementById('upgradeNotice');
+  const activateSection = document.getElementById('activateSection');
+  const activateToggle = document.getElementById('activateToggle');
+  const activateEmail  = document.getElementById('activateEmail');
+  const activateBtn    = document.getElementById('activateBtn');
+  const activateMsg    = document.getElementById('activateMsg');
+  const proSection     = document.getElementById('proSection');
 
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
   const status = await chrome.runtime.sendMessage({ type: 'GET_STATUS', tabId: tab?.id });
@@ -46,6 +53,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   }
 
+  // License section
+  if (status.license.tier === 'pro') {
+    proSection.classList.remove('hidden');
+    upgradeNotice.classList.add('hidden');
+  }
+
   // Handlers
   enableToggle.addEventListener('change', () => {
     chrome.runtime.sendMessage({ type: 'SET_PREF', key: 'enabled', value: enableToggle.checked });
@@ -63,8 +76,80 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   });
 
-  document.getElementById('upgradeLink')?.addEventListener('click', e => {
+  document.getElementById('upgradeMonthly')?.addEventListener('click', e => {
     e.preventDefault();
-    chrome.tabs.create({ url: PRICING_URL });
+    openCheckout('monthly');
   });
+
+  document.getElementById('upgradeAnnual')?.addEventListener('click', e => {
+    e.preventDefault();
+    openCheckout('annual');
+  });
+
+  activateToggle?.addEventListener('click', e => {
+    e.preventDefault();
+    activateSection.classList.toggle('hidden');
+    if (!activateSection.classList.contains('hidden')) activateEmail.focus();
+  });
+
+  activateBtn?.addEventListener('click', () => activateLicense());
+
+  activateEmail?.addEventListener('keydown', e => {
+    if (e.key === 'Enter') activateLicense();
+  });
+
+  document.getElementById('manageLink')?.addEventListener('click', e => {
+    e.preventDefault();
+    chrome.tabs.create({ url: MANAGE_URL });
+  });
+
+  async function openCheckout(plan) {
+    try {
+      const res = await fetch(`${API_URL}/create-checkout-session`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ plan }),
+      });
+      const { url, error } = await res.json();
+      if (error) throw new Error(error);
+      chrome.tabs.create({ url });
+    } catch (err) {
+      console.error('[SG] checkout error:', err.message);
+    }
+  }
+
+  async function activateLicense() {
+    const email = activateEmail.value.trim().toLowerCase();
+    if (!email) return;
+
+    activateBtn.disabled = true;
+    activateBtn.textContent = '...';
+    activateMsg.classList.add('hidden');
+
+    try {
+      const res = await fetch(`${API_URL}/verify?email=${encodeURIComponent(email)}`);
+      const { active, tier } = await res.json();
+
+      if (active) {
+        await chrome.storage.local.set({ license: { tier, email } });
+        proSection.classList.remove('hidden');
+        upgradeNotice.classList.add('hidden');
+        activateSection.classList.add('hidden');
+        chrome.runtime.sendMessage({ type: 'SET_PREF', key: 'enabled', value: true });
+      } else {
+        showMsg('No active subscription found for that email.', 'error');
+      }
+    } catch {
+      showMsg('Could not verify — check your connection.', 'error');
+    } finally {
+      activateBtn.disabled = false;
+      activateBtn.textContent = 'Activate';
+    }
+  }
+
+  function showMsg(text, type) {
+    activateMsg.textContent = text;
+    activateMsg.className = `activate-msg activate-msg-${type}`;
+    activateMsg.classList.remove('hidden');
+  }
 });

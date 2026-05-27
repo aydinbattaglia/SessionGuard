@@ -2,3 +2,5 @@
 *.log
 node_modules/
 .claude-flow/
+server/.env
+server/subscriptions.db

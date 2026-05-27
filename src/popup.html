@@ -43,7 +43,26 @@
 
     <div id="upgradeNotice" class="upgrade-notice hidden">
       <strong>Pro</strong> unlocks LexisNexis, Bloomberg Law &amp; PACER.
-      <a id="upgradeLink" href="#" class="upgrade-link">Upgrade &rarr;</a>
+      <div class="plan-row">
+        <a id="upgradeMonthly" href="#" class="upgrade-link">Monthly &rarr;</a>
+        <span class="plan-sep">&middot;</span>
+        <a id="upgradeAnnual" href="#" class="upgrade-link">Annual (save 20%) &rarr;</a>
+      </div>
+      <a id="activateToggle" href="#" class="activate-toggle">Already subscribed? Activate &rarr;</a>
+    </div>
+
+    <div id="activateSection" class="activate-section hidden">
+      <div class="activate-row">
+        <input type="email" id="activateEmail" placeholder="Purchase email">
+        <button id="activateBtn">Activate</button>
+      </div>
+      <div id="activateMsg" class="activate-msg hidden"></div>
+    </div>
+
+    <div id="proSection" class="pro-section hidden">
+      <span class="pro-badge">Pro</span>
+      <span class="pro-label">Active</span>
+      <a id="manageLink" href="#" class="manage-link">Manage &rarr;</a>
     </div>
 
   </div>
