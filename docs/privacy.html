@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy — SessionGuard</title>
+  <meta name="description" content="SessionGuard privacy policy — what data we collect, how we use it, and what we never do.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .policy {
+      max-width: 680px;
+      margin: 60px auto;
+      padding: 0 24px 80px;
+    }
+    .policy h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 36px;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+    .policy .meta {
+      font-size: 13px;
+      color: var(--muted);
+      font-family: 'IBM Plex Mono', monospace;
+      margin-bottom: 48px;
+    }
+    .policy h2 {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      margin: 36px 0 10px;
+      letter-spacing: .01em;
+    }
+    .policy p, .policy li {
+      font-size: 14px;
+      color: var(--text-mid);
+      line-height: 1.8;
+    }
+    .policy ul {
+      padding-left: 20px;
+      margin: 8px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .policy a { color: var(--gold); }
+    .policy strong { color: var(--text); font-weight: 600; }
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 48px 0;
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">SessionGuard</a>
+  <div class="nav-links">
+    <a href="index.html#features">Features</a>
+    <a href="contact.html">Support</a>
+  </div>
+</nav>
+
+<div class="policy">
+  <h1>Privacy Policy</h1>
+  <p class="meta">Last updated: May 2025</p>
+
+  <p>SessionGuard is a Chrome extension that keeps legal research platform sessions alive. This policy explains exactly what data the extension collects, how it is used, and what it never does.</p>
+
+  <h2>What we collect</h2>
+  <p>SessionGuard collects and stores the following data, <strong>entirely within your browser</strong> using <code>chrome.storage.local</code>:</p>
+  <ul>
+    <li><strong>Session endpoint URLs</strong> — the keepalive endpoint detected for each platform you visit. Used to replay keepalive requests.</li>
+    <li><strong>Preferences</strong> — your chosen keepalive interval (3–15 min) and whether the extension is enabled.</li>
+    <li><strong>Session statistics</strong> — a local count of keepalives fired and timeouts prevented, shown in the popup.</li>
+    <li><strong>License information</strong> (Pro only) — the email address you used at checkout and your subscription tier, stored locally to verify Pro access across browser restarts.</li>
+  </ul>
+
+  <p>This data never leaves your browser except as described in "Third-party services" below.</p>
+
+  <h2>What we never collect</h2>
+  <ul>
+    <li>Passwords, login credentials, or authentication tokens</li>
+    <li>The content of any document or search you view</li>
+    <li>Browsing history outside of the supported legal research platforms</li>
+    <li>Any personally identifiable information beyond the email you voluntarily provide at checkout</li>
+  </ul>
+
+  <h2>How keepalives work</h2>
+  <p>SessionGuard monitors outgoing network requests on supported platforms to detect which URL the platform uses for session activity. Once detected, the extension replays that same request — using cookies and authentication tokens already present in your browser session — at your configured interval. <strong>No credentials are stored or transmitted by the extension.</strong> The request is identical to one your browser would send during normal use.</p>
+
+  <h2>Third-party services</h2>
+
+  <p><strong>SessionGuard server (api.sessionguard.io)</strong><br>
+  When activating a Pro subscription, the extension sends your email address to our server solely to verify that an active subscription exists. No other data is sent. The server returns a yes/no response and does not log your request beyond standard server access logs.</p>
+
+  <p><strong>Stripe</strong><br>
+  Pro subscriptions are processed by Stripe. When you subscribe, you are redirected to a Stripe-hosted checkout page. We never see or store your payment card details. Stripe's privacy policy is available at <a href="https://stripe.com/privacy" target="_blank" rel="noopener">stripe.com/privacy</a>.</p>
+
+  <p><strong>Google Fonts</strong><br>
+  The extension popup loads display fonts from Google Fonts. This is a stylesheet request; no personal data is included. Google's privacy policy applies to this request.</p>
+
+  <h2>Data retention</h2>
+  <p>All locally stored data (endpoints, preferences, stats, license) can be cleared at any time by removing the extension or clearing extension storage. If you cancel your Pro subscription, your local license record will reflect your current subscription status the next time it is verified.</p>
+
+  <h2>Children</h2>
+  <p>SessionGuard is not directed at children under 13. We do not knowingly collect data from children.</p>
+
+  <h2>Changes to this policy</h2>
+  <p>If we make material changes to this policy, we will update the date at the top of this page. Continued use of the extension after changes constitutes acceptance of the updated policy.</p>
+
+  <div class="divider"></div>
+
+  <h2>Contact</h2>
+  <p>Questions about this policy? <a href="contact.html">Contact support</a> or email <a href="mailto:support@sessionguard.io">support@sessionguard.io</a>.</p>
+</div>
+
+<footer>
+  <span>&copy; 2025 SessionGuard</span>
+  <div class="footer-links">
+    <a href="index.html">Home</a>
+    <a href="privacy.html">Privacy</a>
+    <a href="terms.html">Terms</a>
+    <a href="contact.html">Support</a>
+  </div>
+</footer>
+
+</body>
+</html>
