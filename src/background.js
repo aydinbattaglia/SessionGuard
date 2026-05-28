@@ -165,8 +165,10 @@ async function persistEndpoint(platformKey, entry) {
     lastDetected: Date.now(),
   };
   await chrome.storage.local.set({ endpoints });
-  await ensureAlarm(platformKey, prefs?.intervalMinutes ?? DEFAULT_INTERVAL);
-  await fireKeepalive(platformKey); // fire immediately on first detection
+  if (prefs?.enabled !== false) {
+    await ensureAlarm(platformKey, prefs?.intervalMinutes ?? DEFAULT_INTERVAL);
+    await fireKeepalive(platformKey);
+  }
   refreshBadges();
 }
 
