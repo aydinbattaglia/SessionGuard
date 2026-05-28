@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #070b12; --surface: #0d1521; --surface2: #111d2e;
+    --border: #1b2a40; --gold: #c9a84c; --gold-dim: rgba(201,168,76,.10);
+    --gold-bdr: rgba(201,168,76,.22); --text: #e6e0d3; --text-mid: #8791a8;
+    --muted: #48566c; --green: #2ec87a;
+  }
+  html, body { width: 1280px; height: 800px; overflow: hidden; background: var(--bg); }
+  body {
+    font-family: system-ui, -apple-system, sans-serif;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 60px 100px; position: relative; gap: 0;
+  }
+  body::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 70% 50% at 50% 40%, rgba(201,168,76,.04) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .eyebrow {
+    font-family: 'Menlo', 'Monaco', monospace;
+    font-size: 11px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 18px;
+  }
+  h1 {
+    font-family: Georgia, serif;
+    font-size: 46px; font-weight: 700; line-height: 1.1;
+    letter-spacing: -.02em; color: var(--text);
+    text-align: center; margin-bottom: 12px;
+  }
+  .sub { font-size: 16px; color: var(--text-mid); text-align: center; margin-bottom: 52px; }
+
+  .steps {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 0; width: 100%;
+    background: var(--border); border: 1px solid var(--border);
+    border-radius: 14px; overflow: hidden;
+  }
+  .step {
+    padding: 36px 32px; background: var(--surface);
+    position: relative;
+  }
+  .step:not(:last-child)::after {
+    content: '→';
+    position: absolute; right: -10px; top: 50%;
+    transform: translateY(-50%);
+    color: var(--gold); font-size: 18px; z-index: 10;
+    background: var(--surface); padding: 4px;
+    line-height: 1;
+  }
+  .step-num {
+    font-family: 'Menlo', monospace;
+    font-size: 11px; font-weight: 500; letter-spacing: .08em;
+    color: var(--gold); margin-bottom: 20px;
+    text-transform: uppercase;
+  }
+  .step-icon {
+    width: 48px; height: 48px; border-radius: 10px;
+    background: var(--gold-dim); border: 1px solid var(--gold-bdr);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 18px; color: var(--gold);
+  }
+  .step-icon svg { width: 22px; height: 22px; }
+  .step-title { font-size: 18px; font-weight: 600; color: var(--text); margin-bottom: 10px; }
+  .step-desc { font-size: 13px; color: var(--text-mid); line-height: 1.65; }
+
+  .footnote {
+    margin-top: 36px;
+    font-family: 'Menlo', monospace;
+    font-size: 12px; color: var(--muted); letter-spacing: .04em;
+    display: flex; gap: 28px;
+  }
+  .footnote span::before { content: '·  '; }
+</style>
+</head>
+<body>
+  <div class="eyebrow">How it works</div>
+  <h1>Set it once. Never think<br>about it again.</h1>
+  <p class="sub">Install SessionGuard and log in to your platform. Everything else is automatic.</p>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">Step 01</div>
+      <div class="step-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+        </svg>
+      </div>
+      <div class="step-title">Auto-detect</div>
+      <div class="step-desc">SessionGuard watches your network traffic to find the exact keepalive endpoint your platform uses. No configuration, no setup.</div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">Step 02</div>
+      <div class="step-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+        </svg>
+      </div>
+      <div class="step-title">Keepalive</div>
+      <div class="step-desc">Every few minutes, SessionGuard silently replays a small authenticated request — just enough to reset the inactivity timer.</div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">Step 03</div>
+      <div class="step-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+      </div>
+      <div class="step-title">Stay protected</div>
+      <div class="step-desc">Your session stays alive indefinitely. Your credentials never leave the browser. Research uninterrupted, all day long.</div>
+    </div>
+  </div>
+
+  <div class="footnote">
+    <span>No passwords stored</span>
+    <span>Zero configuration</span>
+    <span>Works in the background</span>
+    <span>Free forever on Westlaw</span>
+  </div>
+</body>
+</html>

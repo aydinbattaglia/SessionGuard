@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #070b12; --surface: #0d1521; --surface2: #111d2e;
+    --border: #1b2a40; --gold: #c9a84c; --gold-dim: rgba(201,168,76,.10);
+    --gold-bdr: rgba(201,168,76,.22); --text: #e6e0d3; --text-mid: #8791a8;
+    --muted: #48566c; --green: #2ec87a;
+  }
+  html, body { width: 1280px; height: 800px; overflow: hidden; background: var(--bg); }
+
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.35;transform:scale(.7)} }
+
+  body {
+    font-family: Georgia, 'Times New Roman', serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 80px;
+    position: relative;
+    padding: 0 80px;
+  }
+
+  /* Background radial glow */
+  body::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(201,168,76,.045) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  /* Left: tagline */
+  .left {
+    flex: 1;
+    max-width: 480px;
+  }
+  .eyebrow {
+    font-family: 'Menlo', 'Monaco', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .eyebrow .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 2.2s ease-in-out infinite; }
+  h1 {
+    font-size: 52px;
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -.02em;
+    color: var(--text);
+    margin-bottom: 20px;
+  }
+  h1 em { font-style: normal; color: var(--gold); }
+  .sub {
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: 17px;
+    color: var(--text-mid);
+    line-height: 1.6;
+    margin-bottom: 32px;
+    max-width: 380px;
+  }
+  .stat-row {
+    display: flex;
+    gap: 32px;
+  }
+  .stat {
+    font-family: 'Menlo', 'Monaco', monospace;
+  }
+  .stat-num { font-size: 28px; font-weight: 500; color: var(--text); }
+  .stat-label { font-size: 11px; color: var(--muted); letter-spacing: .04em; text-transform: uppercase; margin-top: 2px; }
+
+  /* Right: popup mockup */
+  .popup-wrap {
+    flex-shrink: 0;
+    position: relative;
+  }
+  .popup-shadow {
+    position: absolute;
+    inset: -20px;
+    background: radial-gradient(ellipse at center, rgba(201,168,76,.1) 0%, transparent 70%);
+    border-radius: 24px;
+  }
+  .popup {
+    width: 288px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 32px 64px rgba(0,0,0,.7), 0 0 0 1px var(--border);
+    position: relative;
+    transform: scale(1.25);
+    transform-origin: center center;
+    margin: 24px;
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: 13px;
+    color: var(--text);
+  }
+  .p-container { padding: 14px 16px; }
+  .p-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding-bottom: 12px; border-bottom: 1px solid var(--border); margin-bottom: 12px;
+  }
+  .p-logo { display: flex; align-items: center; gap: 7px; font-weight: 600; font-size: 14px; }
+  .p-logo-icon {
+    width: 16px; height: 16px; border-radius: 3px;
+    background: var(--gold-dim); border: 1px solid var(--gold-bdr);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .p-logo-icon svg { width: 10px; height: 10px; }
+  .p-beta {
+    font-size: 9px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase;
+    padding: 2px 5px; background: var(--gold-dim); color: var(--gold);
+    border: 1px solid var(--gold-bdr); border-radius: 4px;
+  }
+  .p-toggle-on {
+    width: 36px; height: 20px; background: var(--gold-dim); border: 1px solid var(--gold-bdr);
+    border-radius: 10px; position: relative; flex-shrink: 0;
+  }
+  .p-toggle-on::after {
+    content: ''; position: absolute; width: 14px; height: 14px;
+    right: 2px; top: 2px; background: var(--gold); border-radius: 50%;
+  }
+
+  .p-platform { padding-bottom: 10px; border-bottom: 1px solid var(--border); margin-bottom: 10px; }
+  .p-status-row { display: flex; align-items: center; gap: 8px; padding: 2px 0 4px; }
+  .p-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
+  .p-name { font-weight: 500; }
+  .p-ts { color: var(--muted); margin-left: auto; font-size: 11px; font-family: 'Menlo', monospace; }
+  .p-sessions { font-size: 11px; color: var(--text-mid); font-family: 'Menlo', monospace; }
+
+  .p-interval { padding: 2px 0 10px; border-bottom: 1px solid var(--border); margin-bottom: 10px; }
+  .p-interval-label { font-size: 12px; color: var(--text-mid); margin-bottom: 7px; }
+  .p-interval-label strong { color: var(--gold); font-family: 'Menlo', monospace; }
+  .p-track { width: 100%; height: 4px; background: var(--border); border-radius: 2px; position: relative; }
+  .p-track-fill { width: 60%; height: 100%; background: var(--gold); border-radius: 2px; }
+  .p-thumb { width: 12px; height: 12px; background: var(--gold); border-radius: 50%; position: absolute; left: calc(60% - 6px); top: -4px; }
+</style>
+</head>
+<body>
+  <div class="left">
+    <div class="eyebrow"><span class="dot"></span> Session active</div>
+    <h1>Stay in.<br>Stay <em>focused.</em></h1>
+    <p class="sub">SessionGuard keeps your Westlaw, LexisNexis, Bloomberg Law, and PACER sessions alive automatically. No more re-logging in.</p>
+    <div class="stat-row">
+      <div class="stat">
+        <div class="stat-num">0</div>
+        <div class="stat-label">Timeouts today</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">8m</div>
+        <div class="stat-label">Keepalive interval</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">Free</div>
+        <div class="stat-label">Always</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="popup-wrap">
+    <div class="popup-shadow"></div>
+    <div class="popup">
+      <div class="p-container">
+        <div class="p-header">
+          <div class="p-logo">
+            <div class="p-logo-icon">
+              <svg viewBox="0 0 12 12" fill="none"><path d="M6 11Q2 9 2 7V3L6 1.5L10 3V7Q10 9 6 11Z" fill="none" stroke="#c9a84c" stroke-width="1.2"/><polyline points="3,6 4.5,6 5,4.5 6,8 6.8,5.5 7,5.5 7.5,7 8,6 9,6" fill="none" stroke="#c9a84c" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <span>SessionGuard</span>
+            <span class="p-beta">Beta</span>
+          </div>
+          <div class="p-toggle-on"></div>
+        </div>
+
+        <div class="p-platform">
+          <div class="p-status-row">
+            <span class="p-dot"></span>
+            <span class="p-name">Westlaw</span>
+            <span class="p-ts">1m ago</span>
+          </div>
+          <div class="p-sessions">7 timeouts prevented</div>
+        </div>
+
+        <div class="p-interval">
+          <div class="p-interval-label">Interval: <strong>8</strong>&thinsp;min</div>
+          <div class="p-track"><div class="p-track-fill"></div><div class="p-thumb"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
