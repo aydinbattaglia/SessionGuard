@@ -36,12 +36,21 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     statusDot.className = 'dot ' + (p.hasEndpoint ? 'dot-green' : 'dot-amber');
 
-    if (p.lastKeepalive) {
-      const minAgo = Math.round((Date.now() - p.lastKeepalive) / 60_000);
-      lastKeepalive.textContent = minAgo < 1 ? 'just now' : `${minAgo}m ago`;
-    } else {
-      lastKeepalive.textContent = p.hasEndpoint ? 'pending' : 'detecting...';
+    function renderKeepalive() {
+      if (p.lastKeepalive) {
+        const secsAgo = Math.round((Date.now() - p.lastKeepalive) / 1000);
+        if (secsAgo < 60) {
+          lastKeepalive.textContent = `${secsAgo}s ago`;
+        } else {
+          const minAgo = Math.round(secsAgo / 60);
+          lastKeepalive.textContent = `${minAgo}m ago`;
+        }
+      } else {
+        lastKeepalive.textContent = p.hasEndpoint ? 'pending' : 'detecting...';
+      }
     }
+    renderKeepalive();
+    setInterval(renderKeepalive, 5000);
 
     if (p.sessionsKept > 0) {
       sessionsKept.textContent =
