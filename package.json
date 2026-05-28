@@ -25,6 +25,7 @@
   "homepage": "https://github.com/aydinbattaglia/SessionGuard#readme",
   "devDependencies": {
     "jsdom": "^29.1.1",
+    "sharp": "^0.34.5",
     "vitest": "^4.1.7"
   }
 }

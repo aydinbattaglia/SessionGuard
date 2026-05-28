@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <title>SessionGuard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="popup.css">
 </head>
 <body>
@@ -10,9 +13,7 @@
 
     <header>
       <div class="logo">
-        <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-        </svg>
+        <img src="../icons/icon16.png" width="16" height="16" alt="">
         <span>SessionGuard</span>
         <span class="beta-badge">Beta</span>
       </div>
@@ -26,7 +27,7 @@
       <div class="status-row">
         <span id="statusDot" class="dot"></span>
         <span id="platformName" class="platform-name"></span>
-        <span id="lastKeepalive" class="muted"></span>
+        <span id="lastKeepalive" class="ts"></span>
       </div>
       <div id="sessionsKept" class="sessions-kept"></div>
     </div>
@@ -44,6 +45,21 @@
 
     <div id="upgradeNotice" class="upgrade-notice hidden">
       <strong>Pro coming soon</strong> — LexisNexis, Bloomberg Law &amp; PACER keepalive will be available in the full release.
+      <a href="#" class="activate-toggle" id="activateToggle">Already subscribed? Activate →</a>
+    </div>
+
+    <div id="activateSection" class="activate-section hidden">
+      <div class="activate-row">
+        <input type="email" id="activateEmail" placeholder="you@example.com">
+        <button id="activateBtn">Activate</button>
+      </div>
+      <div id="activateMsg" class="activate-msg hidden"></div>
+    </div>
+
+    <div id="proSection" class="pro-section hidden">
+      <span class="pro-badge">PRO</span>
+      <span class="pro-label">All platforms unlocked</span>
+      <a href="#" id="manageLink" class="manage-link">Manage →</a>
     </div>
 
   </div>
