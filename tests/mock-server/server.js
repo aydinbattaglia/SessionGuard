@@ -23,6 +23,26 @@ const SESSION_TTL_MS = arg ? parseInt(arg.split('=')[1], 10) * 1000 : 240_000;
 // In-memory session store: token -> expiresAt
 const sessions = new Map();
 
+// Event log for the page to poll
+let eventSeq = 0;
+const eventLog = []; // { id, ts, source, status }
+const MAX_EVENTS = 100;
+
+function pushEvent(source, status) {
+  const entry = { id: ++eventSeq, ts: Date.now(), source, status };
+  eventLog.push(entry);
+  if (eventLog.length > MAX_EVENTS) eventLog.shift();
+  return entry;
+}
+
+function detectSource(req) {
+  const origin = req.headers.origin ?? '';
+  if (origin.startsWith('chrome-extension://')) return 'extension';
+  // Service worker fetch may omit Origin entirely
+  if (!origin) return 'extension';
+  return 'page';
+}
+
 function newSession() {
   const token = crypto.randomBytes(16).toString('hex');
   sessions.set(token, Date.now() + SESSION_TTL_MS);
@@ -82,8 +102,13 @@ const server = http.createServer((req, res) => {
   // --- Heartbeat endpoint (what SessionGuard detects and replays) ---
   if (pathname === '/api/session/ping') {
     const token = getToken(req);
-    if (!isValid(token)) return json(res, 401, { error: 'session_expired' }, req);
+    const source = detectSource(req);
+    if (!isValid(token)) {
+      pushEvent(source, 401);
+      return json(res, 401, { error: 'session_expired' }, req);
+    }
     refreshSession(token);
+    pushEvent(source, 200);
     return json(res, 200, { ok: true }, req);
   }
 
@@ -93,6 +118,13 @@ const server = http.createServer((req, res) => {
     if (!isValid(token)) return json(res, 200, { active: false, expiresIn: 0 }, req);
     const expiresIn = Math.max(0, Math.round((sessions.get(token) - Date.now()) / 1000));
     return json(res, 200, { active: true, expiresIn, ttl: SESSION_TTL_MS / 1000 }, req);
+  }
+
+  // --- Event log (page polls this to see extension keepalives) ---
+  if (pathname === '/ui/events') {
+    const since = parseInt(url.searchParams.get('since') ?? '0', 10);
+    const events = eventLog.filter(e => e.id > since);
+    return json(res, 200, { events, latest: eventSeq }, req);
   }
 
   // --- Force-expire (test control) ---

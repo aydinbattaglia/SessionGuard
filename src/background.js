@@ -38,6 +38,7 @@ async function scheduleAlarmsFromStorage() {
   const interval = prefs.intervalMinutes ?? DEFAULT_INTERVAL;
   for (const platformKey of Object.keys(endpoints ?? {})) {
     await ensureAlarm(platformKey, interval);
+    await fireKeepalive(platformKey);
   }
 }
 
@@ -165,6 +166,7 @@ async function persistEndpoint(platformKey, entry) {
   };
   await chrome.storage.local.set({ endpoints });
   await ensureAlarm(platformKey, prefs?.intervalMinutes ?? DEFAULT_INTERVAL);
+  await fireKeepalive(platformKey); // fire immediately on first detection
   refreshBadges();
 }
 
@@ -287,6 +289,17 @@ export async function buildStatus(tabId) {
       const tab = await chrome.tabs.get(tabId);
       const p = getPlatformByDomain(new URL(tab.url).hostname);
       if (p) activePlatform = p.key;
+    } catch {}
+  }
+
+  // Not on a platform tab — fall back to any background platform tab with a known endpoint
+  if (!activePlatform) {
+    try {
+      const platformTabs = await chrome.tabs.query({ url: PLATFORM_URL_PATTERNS });
+      for (const tab of platformTabs) {
+        const p = getPlatformByDomain(new URL(tab.url).hostname);
+        if (p && endpoints?.[p.key]) { activePlatform = p.key; break; }
+      }
     } catch {}
   }
 

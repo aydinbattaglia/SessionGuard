@@ -169,6 +169,7 @@
   let platformHeartbeatPaused = false;
   let heartbeatTimer = null;
   let pollTimer = null;
+  let lastEventId = 0;
 
   const log = document.getElementById('log');
   const progressBar = document.getElementById('progressBar');
@@ -268,11 +269,27 @@
     addLog('Session reset', 'ok');
   });
 
+  async function pollEvents() {
+    try {
+      const res = await fetch(`/ui/events?since=${lastEventId}`);
+      const { events } = await res.json();
+      for (const e of events) {
+        if (e.source === 'extension') {
+          const label = e.status === 200 ? `→ ${e.status} OK (session refreshed)` : `→ ${e.status} (session expired)`;
+          addLog(`[SessionGuard] /api/session/ping ${label}`, e.status === 200 ? 'ext' : 'err');
+        }
+        lastEventId = e.id;
+      }
+    } catch {}
+  }
+
   // Initial heartbeat and poll loop
   pingHeartbeat('platform');
   scheduleHeartbeat();
   pollStatus();
+  pollEvents();
   pollTimer = setInterval(pollStatus, 1000);
+  setInterval(pollEvents, 2000);
 
   addLog(`Mock session started. TTL: ${TTL}s, platform heartbeat: every ${HEARTBEAT_INTERVAL_MS/1000}s`);
 </script>
