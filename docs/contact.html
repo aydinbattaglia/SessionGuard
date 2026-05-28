@@ -4,71 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Contact — SessionGuard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="css/style.css">
-  <style>
-    .contact-page {
-      max-width: 520px;
-      margin: 60px auto;
-      padding: 0 24px 80px;
-    }
-    .contact-page h1 {
-      font-size: 28px;
-      margin-bottom: 8px;
-    }
-    .contact-page .sub {
-      color: var(--muted);
-      font-size: 15px;
-      margin-bottom: 36px;
-    }
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-      margin-bottom: 18px;
-    }
-    .form-group label {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--mid);
-    }
-    .form-group input,
-    .form-group select,
-    .form-group textarea {
-      padding: 9px 12px;
-      font-size: 14px;
-      font-family: inherit;
-      border: 1.5px solid var(--border);
-      border-radius: 7px;
-      outline: none;
-      color: var(--dark);
-      background: #fff;
-      transition: border-color .15s;
-    }
-    .form-group input:focus,
-    .form-group select:focus,
-    .form-group textarea:focus {
-      border-color: var(--blue);
-    }
-    .form-group textarea {
-      resize: vertical;
-      min-height: 120px;
-    }
-    .form-note {
-      font-size: 12px;
-      color: var(--muted);
-      margin-top: 12px;
-    }
-    #successMsg {
-      display: none;
-      padding: 16px 20px;
-      background: #f0fdf4;
-      border: 1px solid #bbf7d0;
-      border-radius: 8px;
-      color: #15803d;
-      font-size: 14px;
-      margin-top: 16px;
-    }
-  </style>
 </head>
 <body>
 
@@ -76,7 +14,6 @@
   <a href="index.html" class="nav-logo">SessionGuard</a>
   <div class="nav-links">
     <a href="index.html#features">Features</a>
-    <a href="pricing.html">Pricing</a>
     <a href="contact.html">Support</a>
   </div>
 </nav>
@@ -108,7 +45,7 @@
       <textarea id="message" name="message" placeholder="Describe your issue…" required></textarea>
     </div>
 
-    <button type="submit" class="btn btn-primary" style="width:100%; padding:11px;">Send message</button>
+    <button type="submit" class="btn btn-primary btn-full" style="padding:12px;">Send message</button>
     <p class="form-note">Your message goes directly to the SessionGuard team.</p>
   </form>
 
@@ -121,7 +58,6 @@
   <span>&copy; 2025 SessionGuard</span>
   <div class="footer-links">
     <a href="index.html">Home</a>
-    <a href="pricing.html">Pricing</a>
     <a href="privacy.html">Privacy</a>
     <a href="terms.html">Terms</a>
   </div>

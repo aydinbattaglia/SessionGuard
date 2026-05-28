@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SessionGuard — Never Get Logged Out of Legal Research Platforms</title>
   <meta name="description" content="SessionGuard is a Chrome extension that keeps your Westlaw, LexisNexis, Bloomberg Law, and PACER sessions alive automatically.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -13,7 +15,6 @@
   <a href="index.html" class="nav-logo">SessionGuard</a>
   <div class="nav-links">
     <a href="#features">Features</a>
-    <a href="pricing.html">Pricing</a>
     <a href="contact.html">Support</a>
   </div>
 </nav>
@@ -21,7 +22,7 @@
 <!-- Hero -->
 <section class="hero">
   <div class="hero-badge">
-    <img src="icon.png" alt="" style="width:14px;height:14px;">
+    <img src="icon.png" alt="" style="width:13px;height:13px;">
     Chrome Extension &nbsp;·&nbsp; Beta
   </div>
   <h1>Never Get Logged Out of Legal Research Platforms Again</h1>
@@ -30,11 +31,16 @@
     <a href="https://chromewebstore.google.com/detail/sessionguard" class="btn btn-primary btn-lg">Add to Chrome — Free</a>
     <a href="pricing.html" class="btn btn-outline btn-lg">See Pricing</a>
   </div>
+  <div class="hero-status">
+    <span class="dot"></span>
+    <span class="dot-label">Session active</span>
+    &nbsp;·&nbsp; Last keepalive 2m ago &nbsp;·&nbsp; 0 timeouts today
+  </div>
   <span class="hero-note">No account required &middot; Works automatically &middot; Cancel anytime</span>
 </section>
 
 <!-- Platforms -->
-<section class="platforms">
+<section class="platforms fade-in">
   <p>Works with</p>
   <div class="platform-chips">
     <span class="chip">Westlaw</span>
@@ -47,11 +53,13 @@
 
 <!-- Features -->
 <section class="features" id="features">
-  <div class="section-label">How it works</div>
-  <div class="section-title">Set it once. Forget session timeouts forever.</div>
+  <div class="fade-in">
+    <div class="section-label">How it works</div>
+    <div class="section-title">Set it once. Forget session timeouts forever.</div>
+  </div>
   <div class="feature-grid">
 
-    <div class="feature-card">
+    <div class="feature-card fade-in" data-delay="1">
       <div class="feature-icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
@@ -61,7 +69,7 @@
       <p>SessionGuard silently pings your session endpoint every few minutes, resetting the inactivity timer without touching your workflow.</p>
     </div>
 
-    <div class="feature-card">
+    <div class="feature-card fade-in" data-delay="2">
       <div class="feature-icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
@@ -71,7 +79,7 @@
       <p>No configuration needed. SessionGuard watches your network traffic to discover the right heartbeat endpoint for each platform automatically.</p>
     </div>
 
-    <div class="feature-card">
+    <div class="feature-card fade-in" data-delay="3">
       <div class="feature-icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
@@ -81,7 +89,7 @@
       <p>Your credentials never leave your browser. SessionGuard replays existing requests — it never stores passwords or login data of any kind.</p>
     </div>
 
-    <div class="feature-card">
+    <div class="feature-card fade-in" data-delay="1">
       <div class="feature-icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
@@ -91,7 +99,7 @@
       <p>See how many session timeouts were prevented and when the last keepalive fired — right in the extension popup.</p>
     </div>
 
-    <div class="feature-card">
+    <div class="feature-card fade-in" data-delay="2">
       <div class="feature-icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
@@ -101,7 +109,7 @@
       <p>Control how often keepalives fire — anywhere from 3 to 15 minutes — to match your platform's timeout window.</p>
     </div>
 
-    <div class="feature-card">
+    <div class="feature-card fade-in" data-delay="3">
       <div class="feature-icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/>
@@ -114,87 +122,10 @@
   </div>
 </section>
 
-<!-- Pricing preview -->
-<section class="pricing" id="pricing">
-  <div class="pricing-header">
-    <div class="section-label">Pricing</div>
-    <div class="section-title">Simple, transparent plans</div>
-  </div>
-  <div class="pricing-cards">
-
-    <div class="plan-card">
-      <div class="plan-name">Free</div>
-      <div class="plan-price">£0</div>
-      <div class="plan-period">Forever free</div>
-      <ul class="plan-features">
-        <li>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-          Westlaw keepalive
-        </li>
-        <li>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-          Smart endpoint detection
-        </li>
-        <li>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-          Session stats
-        </li>
-        <li class="muted">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-          LexisNexis — Pro only
-        </li>
-        <li class="muted">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-          Bloomberg Law — Pro only
-        </li>
-        <li class="muted">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-          PACER — Pro only
-        </li>
-      </ul>
-      <a href="https://chromewebstore.google.com/detail/sessionguard" class="btn btn-outline btn-full">Add to Chrome</a>
-    </div>
-
-    <div class="plan-card featured">
-      <div class="plan-badge">COMING SOON</div>
-      <div class="plan-name">Pro</div>
-      <div class="plan-price" id="heroPrice" style="color:#94a3b8;">£5<span>/mo</span></div>
-      <div class="plan-period" id="heroPeriod">Available in full release</div>
-      <ul class="plan-features">
-        <li>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-          Everything in Free
-        </li>
-        <li>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-          LexisNexis keepalive
-        </li>
-        <li>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-          Bloomberg Law keepalive
-        </li>
-        <li>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-          PACER keepalive
-        </li>
-        <li>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-          Priority support
-        </li>
-      </ul>
-      <button class="btn btn-primary btn-full" disabled style="opacity:.45;cursor:default;">Coming Soon</button>
-    </div>
-
-  </div>
-  <p style="text-align:center; margin-top:20px; font-size:13px; color:var(--muted);">
-    <a href="pricing.html">See annual pricing and full comparison &rarr;</a>
-  </p>
-</section>
-
 <!-- FAQ -->
-<section class="faq">
+<section class="faq fade-in">
   <div class="section-label" style="text-align:center">FAQ</div>
-  <div class="section-title" style="text-align:center">Common questions</div>
+  <div class="section-title" style="text-align:center; max-width:none;">Common questions</div>
 
   <details>
     <summary>Does SessionGuard store my passwords or credentials?</summary>
@@ -225,12 +156,18 @@
 <footer>
   <span>&copy; 2025 SessionGuard</span>
   <div class="footer-links">
-    <a href="pricing.html">Pricing</a>
     <a href="privacy.html">Privacy</a>
     <a href="terms.html">Terms</a>
     <a href="contact.html">Support</a>
   </div>
 </footer>
+
+<script>
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.fade-in').forEach(el => io.observe(el));
+</script>
 
 </body>
 </html>
